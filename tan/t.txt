@@ -1,1 +1,25 @@
+public void Activator(double[] i)
+{
+    inputs = i;
+    double sum = weights[0];
+    for (int j = 0; j < inputs.Length; j++)
+    {
+        sum += inputs[j] * weights[j + 1];
+    }
 
+    switch (type)
+    {
+        case NeuronType.Hidden:
+            // Сначала считаем выход
+            output = Math.Tanh(sum);
+            // Производная Tanh(x) = 1 - Tanh(x)^2
+            // Мы уже знаем Tanh(x) (это output), поэтому просто используем его.
+            derivative = 1.0d - output * output; 
+            break;
+        case NeuronType.Output:
+            output = Math.Exp(sum);
+            // Для Softmax+CrossEntropy производная здесь не нужна в явном виде,
+            // она сокращается в OutputLayer.cs
+            break;
+    }
+}
